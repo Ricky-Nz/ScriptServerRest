@@ -34,7 +34,8 @@
     "public": false
   },
   "Email": {
-    "dataSource": "emailDS"
+    "dataSource": "emailDS",
+    "public": false
   },
   "Folder": {
     "dataSource": "mongoDS",
@@ -50,15 +51,15 @@
   },
   "Package": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Parameter": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Report": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Tester": {
     "dataSource": "mongoDS",
