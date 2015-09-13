@@ -1,0 +1,68 @@
+{
+  "name": "Tester",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "folders": {
+      "type": "hasMany",
+      "model": "Folder",
+      "foreignKey": "testerId"
+    },
+    "packages": {
+      "type": "hasMany",
+      "model": "Package",
+      "foreignKey": "testerId"
+    },
+    "parameters": {
+      "type": "hasMany",
+      "model": "Parameter",
+      "foreignKey": "testerId"
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "Report",
+      "foreignKey": "testerId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "login"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "reverify"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

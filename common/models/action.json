@@ -1,0 +1,38 @@
+{
+  "name": "Action",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "string"
+    },
+    "params": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "script": {
+      "type": "belongsTo",
+      "model": "Script",
+      "foreignKey": "scriptId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    }
+  ],
+  "methods": {}
+}
