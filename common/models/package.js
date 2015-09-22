@@ -1,8 +1,5 @@
-var hideAttributes = require('../hideAttributes');
+var restApiFilter = require('../restApiFilter');
 
 module.exports = function (Package) {
-	hideAttributes.forEach(function (item) {
-		Package.disableRemoteMethod(item.name, item.static);
-	});
-
+	restApiFilter(Package, ['findById', 'updateAttributes', 'deleteById']);
 };

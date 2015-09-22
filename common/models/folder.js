@@ -1,12 +1,16 @@
-var hideAttributes = require('../hideAttributes');
+var restApiFilter = require('../restApiFilter');
 
 module.exports = function (Folder) {
-	hideAttributes.forEach(function (item) {
-		Folder.disableRemoteMethod(item.name, item.static);
+	restApiFilter(Folder, ['create', 'findById', 'updateAttributes', 'deleteById', '__get__scripts']);
+
+	Folder.beforeRemote('create', function (context, data, next) {
+		context.req.body.date = new Date();
+		context.req.body.testerId = context.req.accessToken.userId;
+		next();
 	});
 
-	Folder.beforeRemote('get', function (ctx, modelinstance, next) {
-		ctx.req.body.date = Date.now();
+	Folder.beforeRemote('prototype.updateAttributes', function (context, data, next) {
+		context.req.body.date = new Date();
 		next();
 	});
 };

@@ -1,22 +1,33 @@
-module.exports = function(Tester) {
-	Tester.disableRemoteMethod('upsert', true);
-	Tester.disableRemoteMethod('find', true);
-	Tester.disableRemoteMethod('exists', true);
-	Tester.disableRemoteMethod('findById', true);
-	Tester.disableRemoteMethod('deleteById', true);
-	Tester.disableRemoteMethod('createChangeStream', true);
-	Tester.disableRemoteMethod('count', true);
-	Tester.disableRemoteMethod('findOne', true);
-	Tester.disableRemoteMethod('updateAll', true);
+var debug = require('debug'),
+	log = debug('app:log'),
+	error = debug('app:error'),
+	restApiFilter = require('../restApiFilter');
 
-	Tester.disableRemoteMethod('updateAttributes', false);
-	Tester.disableRemoteMethod('__create__accessTokens', false);
-	Tester.disableRemoteMethod('__get__accessTokens', false);
-	Tester.disableRemoteMethod('__delete__accessTokens', false);
-	Tester.disableRemoteMethod('__findById__accessTokens', false);
-	Tester.disableRemoteMethod('__destroyById__accessTokens', false);
-	Tester.disableRemoteMethod('__updateById__accessTokens', false);
-	Tester.disableRemoteMethod('__count__accessTokens', false);
+module.exports = function(Tester) {
+	restApiFilter(Tester, ['create', 'findById', 'deleteById', '__get__folders', 'login', 'logout']);
+
+	// Tester.afterRemote('create', function (context, tester, next) {
+	// 	var options = {
+	// 		type: 'email',
+	// 		to: tester.email,
+	// 		from: 'ruiqi.newzealand@gmail.com',
+	// 		subject: 'Thanks for registering',
+	// 		redirect: '/',
+	// 		user: tester
+	// 	};
+
+	// 	tester.verify(options)
+	// 		.then(function (err, response) {
+	// 			if (err) throw err;
+
+	// 			log('send verification email sucess');
+	// 			next();
+	// 		})
+	// 		.catch(function (err) {
+	// 			error(err);
+	// 			next(err);
+	// 		});
+	// });
 
 	Tester.reverify = function (email, cb) {
 		Tester.findOne({email: email})
@@ -28,7 +39,7 @@ module.exports = function(Tester) {
 					to: email,
 					from: 'ruiqi.newzealand@gmail.com',
 					subject: 'Thanks for registering',
-					redirect: '/verified',
+					redirect: '/',
 					user: tester
 				};
 
