@@ -12,6 +12,10 @@
     },
     "value": {
       "type": "string"
+    },
+    "date": {
+      "type": "date",
+      "required": true
     }
   },
   "validations": [],
@@ -41,22 +45,19 @@
       "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
-      "property": "deleteById"
-    },
-    {
-      "accessType": "EXECUTE",
-      "principalType": "ROLE",
-      "principalId": "$owner",
-      "permission": "ALLOW",
-      "property": "findById"
-    },
-    {
-      "accessType": "EXECUTE",
-      "principalType": "ROLE",
-      "principalId": "$owner",
-      "permission": "ALLOW",
-      "property": "updateAttributes"
+      "property": ["deleteById", "findById", "updateAttributes"]
     }
   ],
+  "indexes": {
+    "unique_key": {
+      "keys": {
+        "key": 1,
+        "testerId": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "methods": {}
 }

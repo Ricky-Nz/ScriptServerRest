@@ -2,20 +2,22 @@ var assert = require('chai').assert;
 	request = require('superagent'),
 	fs = require('fs'),
 	path = require('path'),
+	_ = require('underscore'),
 	config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'server', 'config.json')));
 
 var host = 'http://' + config.host + ':' + config.port + config.restApiRoot;
 
-describe('Folder related api test', function () {
+describe('Parameter related api test', function () {
 	this.timeout(20000);
 
 	var user = {
 		email: 'ruiqi.newzealand@gmail.com',
 		password: '1234'
 	};
-	var folder = {
-		title: 'test folder name',
-		newTitle: 'test folder name (new)'
+	var parameter = {
+		key: 'parameter key',
+		value: 'parameter value',
+		newValue: 'parameter new value'
 	};
 
 	it('User login', function (done) {
@@ -35,10 +37,10 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Create folder without access_token', function (done) {
+	it('Create parameter without access_token', function (done) {
 		request
-			.post(host + '/Folders')
-			.send(folder)
+			.post(host + '/Parameters')
+			.send(parameter)
 			.accept('json')
 			.end(function (err, res) {
 				assert.equal(err.status, 401, '401 returned');
@@ -46,56 +48,50 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Create folder with access_token', function (done) {
+	it('Create parameter with access_token', function (done) {
 		request
-			.post(host + '/Folders')
+			.post(host + '/Parameters')
 			.query({ access_token: user.id })
-			.send(folder)
+			.send(parameter)
 			.accept('json')
 			.end(function (err, res) {
 				assert.property(res.body, 'id', 'id returned');
-				assert.equal(res.body.title, folder.title, 'name returned');
-				assert.property(res.body, 'testerId', 'id returned');
-				assert.property(res.body, 'date', 'date returned');
-				folder.id = res.body.id;
-				folder.testerId = res.body.testerId;
-				folder.date = res.body.date;
+				assert.equal(res.body.key, parameter.key, 'name returned');
+				assert.equal(res.body.value, parameter.value, 'name returned');
+				parameter.id = res.body.id;
 				done();
 			});
 	});
 
-	it('Get folder with folder id', function (done) {
+	it('Get parameter with folder id', function (done) {
 		request
-			.get(host + '/Folders/' + folder.id)
+			.get(host + '/Parameters/' + parameter.id)
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {
-				assert.equal(res.body.id, folder.id, 'id returned');
-				assert.equal(res.body.title, folder.title, 'name returned');
-				assert.equal(res.body.testerId, folder.testerId, 'id returned');
-				assert.equal(res.body.date, folder.date, 'id returned');
+				assert.equal(res.body.id, parameter.id, 'id returned');
+				assert.equal(res.body.key, parameter.key, 'name returned');
+				assert.equal(res.body.value, parameter.value, 'id returned');
 				done();
 			});
 	});
 
-	it('Update folder with folder id', function (done) {
+	it('Update parameter with id', function (done) {
 		request
-			.put(host + '/Folders/' + folder.id)
+			.put(host + '/Parameters/' + parameter.id)
 			.query({ access_token: user.id })
-			.send({ title: folder.newTitle })
+			.send({ value: parameter.newValue })
 			.accept('json')
 			.end(function (err, res) {
-				assert.equal(res.body.id, folder.id, 'id returned');
-				assert.equal(res.body.title, folder.newTitle, 'name returned');
-				assert.equal(res.body.testerId, folder.testerId, 'id returned');
-				assert.notEqual(res.body.date, folder.date, 'id returned');
+				assert.equal(res.body.id, parameter.id, 'id returned');
+				assert.equal(res.body.value, parameter.newValue, 'name returned');
 				done();
 			});
 	});
 
-	it('Query folders', function (done) {
+	it('Query parameters', function (done) {
 		request
-			.get(host + '/Testers/' + user.userId + '/folders')
+			.get(host + '/Testers/' + user.userId + '/parameters')
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {
@@ -104,9 +100,9 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Delete folder with folder id', function (done) {
+	it('Delete parameter with id', function (done) {
 		request
-			.del(host + '/Folders/' + folder.id)
+			.del(host + '/Parameters/' + parameter.id)
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {

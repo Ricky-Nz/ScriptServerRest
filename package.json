@@ -16,7 +16,8 @@
     "loopback-connector-mongodb": "^1.13.0",
     "loopback-datasource-juggler": "^2.19.0",
     "serve-favicon": "^2.0.1",
-    "superagent": "^1.4.0"
+    "superagent": "^1.4.0",
+    "underscore": "^1.8.3"
   },
   "optionalDependencies": {
     "loopback-explorer": "^1.1.0"

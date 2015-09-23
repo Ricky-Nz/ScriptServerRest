@@ -2,20 +2,21 @@ var assert = require('chai').assert;
 	request = require('superagent'),
 	fs = require('fs'),
 	path = require('path'),
+	_ = require('underscore'),
 	config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'server', 'config.json')));
 
 var host = 'http://' + config.host + ':' + config.port + config.restApiRoot;
 
-describe('Folder related api test', function () {
+describe('Report related api test', function () {
 	this.timeout(20000);
 
 	var user = {
 		email: 'ruiqi.newzealand@gmail.com',
 		password: '1234'
 	};
-	var folder = {
-		title: 'test folder name',
-		newTitle: 'test folder name (new)'
+	var report = {
+		title: 'Report title',
+		content: 'Report content'
 	};
 
 	it('User login', function (done) {
@@ -35,10 +36,10 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Create folder without access_token', function (done) {
+	it('Create reprot without access_token', function (done) {
 		request
-			.post(host + '/Folders')
-			.send(folder)
+			.post(host + '/Reports')
+			.send(report)
 			.accept('json')
 			.end(function (err, res) {
 				assert.equal(err.status, 401, '401 returned');
@@ -46,56 +47,37 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Create folder with access_token', function (done) {
+	it('Create report with access_token', function (done) {
 		request
-			.post(host + '/Folders')
+			.post(host + '/Reports')
 			.query({ access_token: user.id })
-			.send(folder)
+			.send(report)
 			.accept('json')
 			.end(function (err, res) {
 				assert.property(res.body, 'id', 'id returned');
-				assert.equal(res.body.title, folder.title, 'name returned');
-				assert.property(res.body, 'testerId', 'id returned');
-				assert.property(res.body, 'date', 'date returned');
-				folder.id = res.body.id;
-				folder.testerId = res.body.testerId;
-				folder.date = res.body.date;
+				assert.equal(res.body.title, report.title, 'name returned');
+				assert.equal(res.body.content, report.content, 'name returned');
+				report.id = res.body.id;
 				done();
 			});
 	});
 
-	it('Get folder with folder id', function (done) {
+	it('Get report with folder id', function (done) {
 		request
-			.get(host + '/Folders/' + folder.id)
+			.get(host + '/Reports/' + report.id)
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {
-				assert.equal(res.body.id, folder.id, 'id returned');
-				assert.equal(res.body.title, folder.title, 'name returned');
-				assert.equal(res.body.testerId, folder.testerId, 'id returned');
-				assert.equal(res.body.date, folder.date, 'id returned');
+				assert.equal(res.body.id, report.id, 'id returned');
+				assert.equal(res.body.title, report.title, 'name returned');
+				assert.equal(res.body.content, report.content, 'id returned');
 				done();
 			});
 	});
 
-	it('Update folder with folder id', function (done) {
+	it('Query reports', function (done) {
 		request
-			.put(host + '/Folders/' + folder.id)
-			.query({ access_token: user.id })
-			.send({ title: folder.newTitle })
-			.accept('json')
-			.end(function (err, res) {
-				assert.equal(res.body.id, folder.id, 'id returned');
-				assert.equal(res.body.title, folder.newTitle, 'name returned');
-				assert.equal(res.body.testerId, folder.testerId, 'id returned');
-				assert.notEqual(res.body.date, folder.date, 'id returned');
-				done();
-			});
-	});
-
-	it('Query folders', function (done) {
-		request
-			.get(host + '/Testers/' + user.userId + '/folders')
+			.get(host + '/Testers/' + user.userId + '/reports')
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {
@@ -104,9 +86,9 @@ describe('Folder related api test', function () {
 			});
 	});
 
-	it('Delete folder with folder id', function (done) {
+	it('Delete report with id', function (done) {
 		request
-			.del(host + '/Folders/' + folder.id)
+			.del(host + '/Reports/' + report.id)
 			.query({ access_token: user.id })
 			.accept('json')
 			.end(function (err, res) {

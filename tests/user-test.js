@@ -1,13 +1,16 @@
 var assert = require('chai').assert;
-	request = require('superagent');
+	request = require('superagent'),
+	fs = require('fs'),
+	path = require('path'),
+	config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'server', 'config.json')));
 
-var host = 'http://0.0.0.0:3000/api';
+var host = 'http://' + config.host + ':' + config.port + config.restApiRoot;
 
-describe('Full api test', function () {
+describe('User related api test', function () {
 	this.timeout(20000);
 
 	var user = {
-		email: 'ruiqi.newzealand@gmail.com',
+		email: 'ruiqi.gcp@gmail.com',
 		password: '1234'
 	};
 	var folder = {

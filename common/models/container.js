@@ -9,13 +9,19 @@ module.exports = function(Container) {
 	Container.disableRemoteMethod('getFile', true);
 	Container.disableRemoteMethod('removeFile', true);
 
+	Container.beforeRemote('download', function (context, data, next) {
+		if (context.req.params.container != context.req.accessToken.userId) {
+			context.res.status(401).end();
+		}
+		
+		return next();
+	});
+
 	Container.beforeRemote('upload', function (context, data, next) {
-		if (!context.req.accessToken || context.req.params.container != context.req.accessToken.userId) {
+		if (context.req.params.container != context.req.accessToken.userId) {
 			context.res.status(401).end();
 			return next();
 		}
-
-		console.log(context.req);
 
 		Container.getContainer(context.req.params.container, function (err, container) {
 			if (container) {

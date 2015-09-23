@@ -4,7 +4,7 @@ var debug = require('debug'),
 	restApiFilter = require('../restApiFilter');
 
 module.exports = function(Tester) {
-	restApiFilter(Tester, ['create', 'findById', 'deleteById', '__get__folders', 'login', 'logout']);
+	restApiFilter(Tester, ['create', 'findById', 'deleteById', '__get__folders', '__get__packages', '__get__parameters', '__get__reports', 'login', 'logout']);
 
 	// Tester.afterRemote('create', function (context, tester, next) {
 	// 	var options = {
