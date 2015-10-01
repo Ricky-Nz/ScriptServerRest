@@ -43,10 +43,6 @@
   },
   "Script": {
     "dataSource": "mongoDS",
-    "public": true
-  },
-  "Action": {
-    "dataSource": "mongoDS",
     "public": false
   },
   "Package": {

@@ -24,6 +24,7 @@ describe('Folder related api test', function () {
 			.send(user)
 			.accept('json')
 			.end(function (err, res) {
+				console.log(err);
 				assert.isNull(err, err);
 				assert.property(res.body, 'id', 'access token returned');
 				assert.property(res.body, 'userId', 'user id returned');

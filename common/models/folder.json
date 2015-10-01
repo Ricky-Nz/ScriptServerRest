@@ -47,7 +47,17 @@
       "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
-      "property": ["deleteById", "findById", "updateAttributes"]
+      "property": [
+        "deleteById",
+        "findById",
+        "updateAttributes",
+        "__get__scripts",
+        "__updateById__scripts",
+        "__destroyById__scripts",
+        "__findById__scripts",
+        "__create__scripts",
+        "__count__scripts"
+      ]
     }
   ],
   "methods": {}

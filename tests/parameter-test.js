@@ -63,6 +63,18 @@ describe('Parameter related api test', function () {
 			});
 	});
 
+	it('Create parameter with save key again', function (done) {
+		request
+			.post(host + '/Parameters')
+			.query({ access_token: user.id })
+			.send(_.pick(parameter, 'key', 'value'))
+			.accept('json')
+			.end(function (err, res) {
+				console.log(res.body);
+				done();
+			});
+	});
+
 	it('Get parameter with folder id', function (done) {
 		request
 			.get(host + '/Parameters/' + parameter.id)

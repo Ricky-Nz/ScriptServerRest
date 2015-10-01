@@ -1,33 +1,42 @@
 var debug = require('debug'),
 	log = debug('app:log'),
 	error = debug('app:error'),
-	restApiFilter = require('../restApiFilter');
+	restApiFilter = require('../restApiFilter'),
+	_ = require('underscore');
 
 module.exports = function(Tester) {
 	restApiFilter(Tester, ['create', 'findById', 'deleteById', '__get__folders', '__get__packages', '__get__parameters', '__get__reports', 'login', 'logout']);
 
-	// Tester.afterRemote('create', function (context, tester, next) {
-	// 	var options = {
-	// 		type: 'email',
-	// 		to: tester.email,
-	// 		from: 'ruiqi.newzealand@gmail.com',
-	// 		subject: 'Thanks for registering',
-	// 		redirect: '/',
-	// 		user: tester
-	// 	};
+	function countTotalItems (context, countMethod, next) {
+		context.instance[countMethod](function (err, total) {
+			var result = {
+				total: total,
+				data: context.result
+			};
+			if (context.req.query.filter) {
+				_.extend(result, JSON.parse(context.req.query.filter));
+			}
 
-	// 	tester.verify(options)
-	// 		.then(function (err, response) {
-	// 			if (err) throw err;
+			context.result = result;
+			next();
+		});
+	}
 
-	// 			log('send verification email sucess');
-	// 			next();
-	// 		})
-	// 		.catch(function (err) {
-	// 			error(err);
-	// 			next(err);
-	// 		});
-	// });
+	Tester.afterRemote('prototype.__get__folders', function (context, data, next) {
+		countTotalItems(context, '__count__folders', next);
+	});
+
+	Tester.afterRemote('prototype.__get__packages', function (context, data, next) {
+		countTotalItems(context, '__count__packages', next);
+	});
+
+	Tester.afterRemote('prototype.__get__parameters', function (context, data, next) {
+		countTotalItems(context, '__count__parameters', next);
+	});
+
+	Tester.afterRemote('prototype.__get__reports', function (context, data, next) {
+		countTotalItems(context, '__count__reports', next);
+	});
 
 	Tester.reverify = function (email, cb) {
 		Tester.findOne({email: email})
