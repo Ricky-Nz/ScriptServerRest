@@ -1,11 +1,16 @@
 {
-  "name": "Container",
+  "name": "Client",
   "base": "Model",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [
@@ -16,14 +21,10 @@
       "permission": "DENY"
     },
     {
-      "accessType": "EXECUTE",
+      "accessType": "*",
       "principalType": "ROLE",
       "principalId": "$authenticated",
-      "permission": "ALLOW",
-      "property": [
-        "upload",
-        "download"
-      ]
+      "permission": "ALLOW"
     }
   ],
   "methods": {}

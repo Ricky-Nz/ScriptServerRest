@@ -6,7 +6,7 @@
   "mongoDS": {
     "host": "127.0.0.1",
     "port": "27017",
-    "database": "jupiter",
+    "database": "gear",
     "name": "mongoDS",
     "connector": "mongodb"
   },

@@ -37,25 +37,21 @@
     "dataSource": "emailDS",
     "public": false
   },
-  "Folder": {
-    "dataSource": "mongoDS",
-    "public": true
-  },
   "Script": {
     "dataSource": "mongoDS",
     "public": false
   },
   "Package": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Parameter": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Report": {
     "dataSource": "mongoDS",
-    "public": true
+    "public": false
   },
   "Tester": {
     "dataSource": "mongoDS",
@@ -66,6 +62,10 @@
   },
   "Container": {
     "dataSource": "storage",
+    "public": true
+  },
+  "Client": {
+    "dataSource": "db",
     "public": true
   }
 }

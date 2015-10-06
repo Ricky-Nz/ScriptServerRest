@@ -37,7 +37,10 @@ module.exports = function(Container) {
 	});
 
 	Container.afterRemote('upload', function (context, data, next) {
-		var file = data.result.files.file[0];
+		var file;
+		if (data.result.files && data.result.files.file) {
+			file = data.result.files.file[0];
+		}
 		if (!file) {
 			context.res.status(401);
 			return next();

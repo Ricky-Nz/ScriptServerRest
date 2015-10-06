@@ -5,16 +5,43 @@ var debug = require('debug'),
 	_ = require('underscore');
 
 module.exports = function(Tester) {
-	restApiFilter(Tester, ['create', 'findById', 'deleteById', '__get__folders', '__get__packages', '__get__parameters', '__get__reports', 'login', 'logout']);
+	restApiFilter(Tester, [
+		'login',
+		'logout',
+		'create',
+		'findById',
+		'deleteById',
+		'updateAttributes',
+		'__create__scripts',
+		'__create__parameters',
+		'__create__reports',
+		'__get__scripts',
+		'__get__parameters',
+		'__get__packages',
+		'__get__reports',
+		'__updateById__scripts',
+		'__updateById__parameters',
+		'__destroyById__scripts',
+		'__destroyById__parameters',
+		'__destroyById__packages',
+		'__destroyById__reports',
+		'__findById__scripts',
+		'__count__scripts',
+		'__count__parameters',
+		'__count__packages',
+		'__count__reports'
+	]);
 
 	function countTotalItems (context, countMethod, next) {
-		context.instance[countMethod](function (err, total) {
+		const filter = JSON.parse(context.args.filter);
+		context.instance[countMethod](filter.where, function (err, total) {
 			var result = {
 				total: total,
 				data: context.result
 			};
 			if (context.req.query.filter) {
-				_.extend(result, JSON.parse(context.req.query.filter));
+				var query = JSON.parse(context.req.query.filter);
+				_.extend(result, {skip: query.skip ? query.skip + query.limit : query.limit});
 			}
 
 			context.result = result;
@@ -22,8 +49,22 @@ module.exports = function(Tester) {
 		});
 	}
 
-	Tester.afterRemote('prototype.__get__folders', function (context, data, next) {
-		countTotalItems(context, '__count__folders', next);
+	Tester.beforeRemote('prototype.*', function (context, data, next) {
+		if (context.args.data) {
+			context.args.data.date = new Date();
+		}
+		
+		next();
+	});
+
+	Tester.beforeRemote('prototype.__destroyById__packages', function (context, data, next) {
+		Package.findById(data.id, function (err, package) {
+			if (err) return next(err);
+
+			Package.app.models.Container.removeFile(package.testerId.toString(), package.fileName, function (err, result) {
+				next();
+			});
+		});
 	});
 
 	Tester.afterRemote('prototype.__get__packages', function (context, data, next) {
@@ -36,6 +77,45 @@ module.exports = function(Tester) {
 
 	Tester.afterRemote('prototype.__get__reports', function (context, data, next) {
 		countTotalItems(context, '__count__reports', next);
+	});
+
+	Tester.afterRemote('prototype.__get__scripts', function (context, data, next) {
+		countTotalItems(context, '__count__scripts', next);
+	});
+	
+	Tester.afterRemote('login', function (context, data, next) {
+		context.result.email = context.req.body.email;
+		next();
+	});
+
+	Tester.getTags = function (context, req, res, cb) {
+		Tester.app.models.Script.find({
+			where: {
+				testerId: req.accessToken.userId
+			},
+			fields: {
+				tags: true
+			}
+		}, function (err, scrips) {
+			var nestedArray = _.map(scrips, function (script) {
+				return script.tags;
+			})
+			cb(err, _.union(_.flatten(nestedArray)));
+		});
+	};
+
+	Tester.remoteMethod('getTags', {
+		description: 'get all script tags which owned by this user',
+		accepts: [
+			{arg: 'context', type: 'object', 'http': {source: 'context'}},
+			{arg: 'req', type: 'object', 'http': {source: 'req'}},
+			{arg: 'res', type: 'object', 'http': {source: 'res'}}
+		],
+		returns: { arg: 'tags', type: 'array' },
+		http: {
+			path: '/tags',
+			verb: 'get'
+		}
 	});
 
 	Tester.reverify = function (email, cb) {

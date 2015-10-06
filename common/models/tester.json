@@ -5,14 +5,15 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "tags": {
+      "type": [
+        "String"
+      ]
+    }
+  },
   "validations": [],
   "relations": {
-    "folders": {
-      "type": "hasMany",
-      "model": "Folder",
-      "foreignKey": "testerId"
-    },
     "packages": {
       "type": "hasMany",
       "model": "Package",
@@ -26,6 +27,11 @@
     "reports": {
       "type": "hasMany",
       "model": "Report",
+      "foreignKey": "testerId"
+    },
+    "scripts": {
+      "type": "hasMany",
+      "model": "Script",
       "foreignKey": "testerId"
     }
   },
@@ -55,11 +61,33 @@
       "property": [
         "findById",
         "deleteById",
-        "__get__folders",
-        "__get__packages",
+        "updateAttributes",
+        "__create__scripts",
+        "__create__parameters",
+        "__create__reports",
+        "__get__scripts",
         "__get__parameters",
-        "__get__reports"
+        "__get__packages",
+        "__get__reports",
+        "__updateById__scripts",
+        "__updateById__parameters",
+        "__destroyById__scripts",
+        "__destroyById__parameters",
+        "__destroyById__packages",
+        "__destroyById__reports",
+        "__findById__scripts",
+        "__count__scripts",
+        "__count__parameters",
+        "__count__packages",
+        "__count__reports"
       ]
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "getTags"
     }
   ],
   "methods": {}

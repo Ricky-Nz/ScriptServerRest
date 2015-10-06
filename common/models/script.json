@@ -14,17 +14,25 @@
       "type": "string",
       "required": true
     },
-    "content": {
-      "type": "string",
+    "tags": {
+      "type": [
+        "string"
+      ],
+      "required": true
+    },
+    "actions": {
+      "type": [
+        "object"
+      ],
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "folder": {
+    "tester": {
       "type": "belongsTo",
-      "model": "Folder",
-      "foreignKey": "folderId"
+      "model": "Tester",
+      "foreignKey": "testerId"
     }
   },
   "acls": [

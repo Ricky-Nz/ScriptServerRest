@@ -2,6 +2,17 @@
   "name": "Parameter",
   "base": "PersistedModel",
   "idInjection": true,
+  "indexes": {
+    "unique_key": {
+      "keys": {
+        "key": 1,
+        "testerId": 1
+      },
+      "options": {
+        "unique": true
+      }
+    }
+  },
   "options": {
     "validateUpsert": true
   },
@@ -45,19 +56,12 @@
       "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
-      "property": ["deleteById", "findById", "updateAttributes"]
+      "property": [
+        "deleteById",
+        "findById",
+        "updateAttributes"
+      ]
     }
   ],
-  "indexes": {
-    "unique_key": {
-      "keys": {
-        "key": 1,
-        "testerId": 1
-      },
-      "options": {
-        "unique": true
-      }
-    }
-  },
   "methods": {}
 }
