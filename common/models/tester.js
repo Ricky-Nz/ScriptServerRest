@@ -2,7 +2,9 @@ var debug = require('debug'),
 	log = debug('app:log'),
 	error = debug('app:error'),
 	restApiFilter = require('../restApiFilter'),
-	_ = require('underscore');
+	_ = require('underscore'),
+	path = require('path'),
+	fs = require('fs');
 
 module.exports = function(Tester) {
 	restApiFilter(Tester, [
@@ -33,8 +35,11 @@ module.exports = function(Tester) {
 	]);
 
 	function countTotalItems (context, countMethod, next) {
-		const filter = JSON.parse(context.args.filter);
-		context.instance[countMethod](filter.where, function (err, total) {
+		var where = null;
+		if (context.args.filter) {
+			where = JSON.parse(context.args.filter).where;
+		}
+		context.instance[countMethod](where, function (err, total) {
 			var result = {
 				total: total,
 				data: context.result
@@ -58,10 +63,10 @@ module.exports = function(Tester) {
 	});
 
 	Tester.beforeRemote('prototype.__destroyById__packages', function (context, data, next) {
-		Package.findById(data.id, function (err, package) {
+		Tester.app.models.Package.findById(context.args.fk, function (err, package) {
 			if (err) return next(err);
 
-			Package.app.models.Container.removeFile(package.testerId.toString(), package.fileName, function (err, result) {
+			Tester.app.models.Container.removeFile(package.testerId.toString(), package.fileName, function (err, result) {
 				next();
 			});
 		});
@@ -85,6 +90,7 @@ module.exports = function(Tester) {
 	
 	Tester.afterRemote('login', function (context, data, next) {
 		context.result.email = context.req.body.email;
+		context.result.config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'custom-config.json')));
 		next();
 	});
 

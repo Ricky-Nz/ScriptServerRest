@@ -1,0 +1,28 @@
+{
+	"findTypes": [
+		"Id",
+		"Name",
+		"ClassName",
+		"TagName",
+		"XPath",
+		"IosUIAutomation",
+		"AndroidUIAutomator",
+		"AccessibilityId",
+		"LinkText",
+		"PartialLinkText",
+		"Css",
+		"CssSelector"
+	],
+	"actionTypes": [
+		{ "name": "Click", "element": true },
+		{ "name": "Input", "element": true, "args": ".*" },
+		{ "name": "Touch", "args": "\\((\\d*\\.?\\d+), ?(\\d*\\.?\\d+)\\)", "help": "plaese follow this format: (x_number, y_number)" },
+		{ "name": "TouchRelative", "args": "\\((0\\.\\d+), ?(0\\.\\d+)\\)", "help": "plaese follow this format: (0.x_precentage, 0.y_precentage)" },
+		{ "name": "ClearInput", "element": true },
+		{ "name": "FlickUp" },
+		{ "name": "FlickDown" },
+		{ "name": "FlickLeft" },
+		{ "name": "FlickRight" },
+		{ "name": "Back" }
+	]
+}

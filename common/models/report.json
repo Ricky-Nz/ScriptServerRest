@@ -6,17 +6,35 @@
     "validateUpsert": true
   },
   "properties": {
-    "title": {
+    "tags": {
       "type": "string",
       "required": true
     },
-    "content": {
-      "type": "string",
-      "required": true
-    },
-    "date": {
+    "startDate": {
       "type": "date",
       "required": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true
+    },
+    "platform": {
+      "type": "string",
+      "required": true
+    },
+    "platformVersion": {
+      "type": "string",
+      "required": true
+    },
+    "scripts": {
+      "type": ["object"],
+      "required": true
+    },
+    "packageName": {
+      "type": "string"
+    },
+    "packageDate": {
+      "type": "string"
     }
   },
   "validations": [],
@@ -37,16 +55,10 @@
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
-      "principalId": "$authenticated",
-      "permission": "ALLOW",
-      "property": "create"
-    },
-    {
-      "accessType": "EXECUTE",
-      "principalType": "ROLE",
       "principalId": "$owner",
       "permission": "ALLOW",
       "property": [
+        "create",
         "deleteById",
         "findById",
         "updateAttributes"
