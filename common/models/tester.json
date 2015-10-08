@@ -76,6 +76,7 @@
         "__destroyById__packages",
         "__destroyById__reports",
         "__findById__scripts",
+        "__findById__reports",
         "__count__scripts",
         "__count__parameters",
         "__count__packages",

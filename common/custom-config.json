@@ -19,10 +19,11 @@
 		{ "name": "Touch", "args": "\\((\\d*\\.?\\d+), ?(\\d*\\.?\\d+)\\)", "help": "plaese follow this format: (x_number, y_number)" },
 		{ "name": "TouchRelative", "args": "\\((0\\.\\d+), ?(0\\.\\d+)\\)", "help": "plaese follow this format: (0.x_precentage, 0.y_precentage)" },
 		{ "name": "ClearInput", "element": true },
-		{ "name": "FlickUp" },
-		{ "name": "FlickDown" },
-		{ "name": "FlickLeft" },
-		{ "name": "FlickRight" },
-		{ "name": "Back" }
+		{ "name": "FlickUp", "args": "^[0-9]*$", "help": "enter the distance in pixel." },
+		{ "name": "FlickDown", "args": "^[0-9]*$", "help": "enter the distance in pixel." },
+		{ "name": "FlickLeft", "args": "^[0-9]*$", "help": "enter the distance in pixel." },
+		{ "name": "FlickRight", "args": "^[0-9]*$", "help": "enter the distance in pixel." },
+		{ "name": "Back" },
+		{ "name": "Wait", "args": "^[0-9]*$", "help": "number in milliseconds to wait." }
 	]
 }

@@ -28,6 +28,7 @@ module.exports = function(Tester) {
 		'__destroyById__packages',
 		'__destroyById__reports',
 		'__findById__scripts',
+		'__findById__reports',
 		'__count__scripts',
 		'__count__parameters',
 		'__count__packages',
@@ -46,7 +47,7 @@ module.exports = function(Tester) {
 			};
 			if (context.req.query.filter) {
 				var query = JSON.parse(context.req.query.filter);
-				_.extend(result, {skip: query.skip ? query.skip + query.limit : query.limit});
+				_.extend(result, {skip: query.skip ? query.skip + context.result.length : context.result.length});
 			}
 
 			context.result = result;
