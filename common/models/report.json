@@ -31,7 +31,9 @@
       "required": true
     },
     "scripts": {
-      "type": ["object"],
+      "type": [
+        "object"
+      ],
       "required": true
     },
     "packageName": {

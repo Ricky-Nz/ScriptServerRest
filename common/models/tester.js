@@ -47,7 +47,7 @@ module.exports = function(Tester) {
 			};
 			if (context.req.query.filter) {
 				var query = JSON.parse(context.req.query.filter);
-				_.extend(result, {skip: query.skip ? query.skip + context.result.length : context.result.length});
+				_.extend(result, {skip: query.skip ? query.skip : 0});
 			}
 
 			context.result = result;
@@ -91,7 +91,6 @@ module.exports = function(Tester) {
 	
 	Tester.afterRemote('login', function (context, data, next) {
 		context.result.email = context.req.body.email;
-		context.result.config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'custom-config.json')));
 		next();
 	});
 
@@ -121,6 +120,28 @@ module.exports = function(Tester) {
 		returns: { arg: 'tags', type: 'array' },
 		http: {
 			path: '/tags',
+			verb: 'get'
+		}
+	});
+
+	Tester.getVersions = function (cb) {
+		var config = JSON.parse(fs.readFileSync(
+				path.join(__dirname, '..', '..', 'server', 'config.json')));
+		var releaseFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'client', 'releases'));
+
+		cb(null, releaseFiles.map(function (release) {
+			return {
+				name: release,
+				download: 'http://' + config.host + ':' + config.port + '/releases/' + release
+			}
+		}));
+	};
+
+	Tester.remoteMethod('getVersions', {
+		description: 'get gear verisons',
+		returns: { arg: 'versions', type: 'array' },
+		http: {
+			path: '/versions',
 			verb: 'get'
 		}
 	});
