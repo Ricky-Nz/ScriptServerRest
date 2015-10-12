@@ -1,25 +1,24 @@
+var path = require('path')
+
 module.exports = function(server) {
-	var Tester = server.models.Tester;
-	var RoleMapping = server.models.RoleMapping;
-	var Role = server.models.Role;
-
-	// Tester.create(
-	// 	{ email: 'ruiqi.sg@gmail.com', password: '1234' }
-	// ).then(function (err, user) {
-	// 	if (err) throw err;
-
-	// 	return Role.create({name: 'admin'});
-	// }).then(function (err, role) {
-	// 	if (err) throw err;
-
-	// 	return role.principals.create({
-	// 		principalType: RoleMapping.USER,
-	// 		principalId: user.id
-	// 	});
-	// }).then(function (err, principal) {
-	// 	if (err) throw err;
-	// }).catch(function (err) {
-	// 	console.log("Setup Admin Failed:");
-	// 	console.log(err);
-	// });
+	var router = server.loopback.Router();
+	router.get('/scripts', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	router.get('/parameters', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	router.get('/packages', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	router.get('/reports', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	router.get('/guide', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	router.get('/scripteditor', function (req, res) {
+		res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+	});
+	server.use(router);
 };
