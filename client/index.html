@@ -3,30 +3,15 @@
 	<head>
 		<title>Test Automation</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="./bootstrap.min.css">
+		<link rel="stylesheet" href="./res/bootstrap.min.css">
 		<style type="text/css">
-			html, body {
-				margin: 0;
-				padding: 0;
+			.fillHeight {
 				height: 100%;
-				overflow: hidden;
-			}
-			::-webkit-scrollbar { 
-			    display: none; 
-			}
-			* {
-				box-sizing: border-box;
-			}
-			.form-group {
-			    margin-bottom: 0px;
-			}
-			*:focus,*:active {
-			   outline: none !important;
 			}
 		</style>
 	</head>
 	<body>
-		<div id="app"></div>
-		<script src="./app.js"></script>
+		<div id='root' class='fillHeight'></div>
+		<script src="./bundle.js"></script>
 	</body>
 </html>
