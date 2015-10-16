@@ -132,7 +132,7 @@ module.exports = function(Tester) {
 		cb(null, releaseFiles.map(function (release) {
 			return {
 				name: release,
-				download: 'http://www.granny.io/releases/' + release
+				download: 'http://granny.io/releases/' + release
 			}
 		}));
 	};
