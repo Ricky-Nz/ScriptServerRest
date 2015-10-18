@@ -86,7 +86,51 @@ module.exports = function(Tester) {
 	});
 
 	Tester.afterRemote('prototype.__get__scripts', function (context, data, next) {
-		countTotalItems(context, '__count__scripts', next);
+		console.log(context.req.query);
+		if (context.req.query.convert) {
+			var parameters = [];
+			context.result.forEach(function (script) {
+				script.actions.forEach(function (action) {
+					if (action.actionArgs) {
+						var match = /{(.*)}/.exec(action.actionArgs);
+						if (match && match[1]) {
+							parameters.push(match[1]);
+						}
+					}
+					if (action.findArgs) {
+						var match = /{(.*)}/.exec(action.findArgs);
+						if (match && match[1]) {
+							parameters.push(match[1]);
+						}
+					}
+				});
+			});
+
+			if (parameters.length) {
+				Tester.app.models.Parameter.find({key: {inq: parameters}}, function (err, parameters) {
+					if (parameters) {
+						parameters.forEach(function (parameter) {
+							context.result.forEach(function (script) {
+								script.actions.forEach(function (action) {
+									if (action.actionArgs) {
+										action.actionArgs = action.actionArgs.replace('{' + parameter.key + '}', parameter.value);
+									}
+									if (action.findArgs) {
+										action.findArgs = action.findArgs.replace('{' + parameter.key + '}', parameter.value);
+									}
+								});
+							});
+						});
+					}
+
+					next();
+				});
+			} else {
+				next();
+			}
+		} else {
+			countTotalItems(context, '__count__scripts', next);
+		}
 	});
 	
 	Tester.afterRemote('login', function (context, data, next) {
