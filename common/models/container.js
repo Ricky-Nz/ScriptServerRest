@@ -49,7 +49,7 @@ module.exports = function(Container) {
 			return next();
 		}
 
-		if (file.name.endsWith('.tar.gz')) {
+		if (file.name.indexOf('.tar.gz') > 0) {
 			if (!data.result.fields.report) {
 				return next(new Error('report data not found'));
 			}
