@@ -1,4 +1,7 @@
 var restApiFilter = require('../restApiFilter');
+var path = require('path');
+var targz = require('tar.gz');
+var fs = require('fs-extra');
 
 module.exports = function(Container) {
 	Container.disableRemoteMethod('getContainers', true);
@@ -46,22 +49,52 @@ module.exports = function(Container) {
 			return next();
 		}
 
-		var title = data.result.fields.title[0];
-		var description = data.result.fields.description[0];
+		if (file.name.endsWith('.tar.gz')) {
+			if (!data.result.fields.report) {
+				return next(new Error('report data not found'));
+			}
 
-		Container.app.models.Package.create({
-			title: title ? title : file.name,
-			description: description,
-			fileName: file.name,
-			size: file.size,
-			type: file.type,
-			testerId: file.container,
-			date: new Date()
-		}, function (err, package) {
-			if (err) return next(err);
+			var report = JSON.parse(data.result.fields.report);
+			report.testerId = file.container;
+			report.date = new Date();
 
-			context.result = package;
-			next();
-		});
+			Container.app.models.Report.create(report, function (err, report) {
+				var zipFilePath = path.join(__dirname, '..', '..', 'client', 'storage', report.testerId.toString(), file.name);
+				if (err) {
+					fs.remove(zipFilePath);
+					return next(err);
+				}
+				
+				var extractPath = path.join(__dirname, '..', '..', 'client', 'storage', report.testerId.toString(), 'reports', report.id.toString());
+				new targz().extract(zipFilePath, extractPath, function(err){
+				  	fs.remove(zipFilePath);
+
+				    if (err) {
+				        return next(err);
+				    }
+
+					context.result = report;
+					next();
+				});
+			});
+		} else {
+			var title = data.result.fields.title[0];
+			var description = data.result.fields.description[0];
+
+			Container.app.models.Package.create({
+				title: title ? title : file.name,
+				description: description,
+				fileName: file.name,
+				size: file.size,
+				type: file.type,
+				testerId: file.container,
+				date: new Date()
+			}, function (err, package) {
+				if (err) return next(err);
+
+				context.result = package;
+				next();
+			});
+		}
 	});
 };

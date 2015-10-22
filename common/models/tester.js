@@ -86,7 +86,6 @@ module.exports = function(Tester) {
 	});
 
 	Tester.afterRemote('prototype.__get__scripts', function (context, data, next) {
-		console.log(context.req.query);
 		if (context.req.query.convert) {
 			var parameters = [];
 			context.result.forEach(function (script) {
